@@ -1,0 +1,12 @@
+{
+  "title": "Item Name",
+  "image": "Lock.svg",
+  "rarity": "rarity",
+  "objecttype": "objecttype",
+  "properties": [
+    "tag1",
+    "tag2"
+  ],
+  "effect": "Some effect text here.",
+  "description": "Some item description."
+}
