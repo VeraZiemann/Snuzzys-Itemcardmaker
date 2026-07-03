@@ -37,33 +37,72 @@
   stroke: 2pt + black
 )
 
-//---properties, description & effect---
-#rect(
-  grid(
-    columns: (auto),
-    rows: (auto),
-    gutter: 5mm,
+//---different body functions---
 
+// item has: properties, description, effect
+#let draw_item(item) = [
+  #rect(
     grid(
-    columns: (1fr,2fr),
-    gutter: 5mm,
-    //---properties---
-    [
-      #for property in item.properties [
+      columns: (auto),
+      rows: (auto),
+      gutter: 5mm,
+
+      grid(
+      columns: (1fr,2fr),
+      gutter: 5mm,
+      //---properties---
+      [
+        #for property in item.properties [
         #box(rect(radius: 2pt, stroke: 1pt + gray, text(property, size: 2mm)))
-      ]
-      
-    ],
-    //---description---
-    item.description,
-  ),
+        ]
+      ],
+      //---description---
+      item.description,
+    ),
   
-  //---effect---
-  item.effect
+    //---effect---
+    item.effect
   ),
   
   width: 100%,
   height: auto,
   radius: (bottom: 5pt),
   stroke: 2pt + black
-)
+  )
+]
+
+#let draw_component(item) = [
+#rect(
+    grid(
+      columns: (auto),
+      rows: (auto),
+      gutter: 5mm,
+
+      grid(
+      columns: (15%,2fr),
+      gutter: 5mm,
+      [
+        #for property in item.properties [
+          #box(rect(radius: 2pt, stroke: 1pt + gray,        text(property, size: 2mm)))
+        ]
+        
+      ],
+      item.description
+      ),
+    ),
+  
+    width: 100%,
+    height: auto,
+    radius: (bottom: 5pt),
+    stroke: 2pt + black
+  )
+]
+
+//---body---
+//changes on cardtype
+
+#if item.cardtype == "item"{
+    draw_item(item)
+  }  else if item.cardtype == "component" {
+    draw_component(item)
+  }

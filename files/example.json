@@ -1,4 +1,5 @@
 {
+  "cardtype": "item",
   "title": "Item Name",
   "image": "Lock.svg",
   "rarity": "rarity",
