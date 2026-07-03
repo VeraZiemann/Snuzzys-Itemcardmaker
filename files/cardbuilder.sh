@@ -1,27 +1,43 @@
 #!/bin/bash
 
+# flag long path output
+LONG=false
+
+while getopts "l" opt; do
+  case $opt in
+    l) LONG=true ;;
+    *) echo "Usage: $0 [-l]"; exit 1 ;;
+  esac
+done
+
 # test if directories have already been created
 mkdir -p cards
 mkdir -p items
 mkdir -p images
 
-# loop over files
+# loop over files in items/
 	# extract filename
 	# check if file is not yet generated 
 	# or
 	# check if json is newer than pdf
 		# compily typst
 
-for file in items/*.json; do
+find ./items -type f -name "*.json" | while read -r file; do
 
-    name=$(basename "$file" .json)
+    # relative path for correct placement
+    rel_path="${file#./items/}"
 
-    output="cards/${name}.png"
+    # get correct output
+    output="cards/${rel_path%.json}.png"
+
+    # target directory
+    mkdir -p "$(dirname "$output")"
 
     # render only if:
     # - pdf does not exist
     # - json file changed
     # - main.typ changed
+    rebuild=false
     
     if [ ! -f "$output" ] || \
        [ "$file" -nt "$output" ] || \
@@ -32,7 +48,11 @@ for file in items/*.json; do
 
     if [ "$rebuild" = true ]; then
 
-        echo "Rendering $output"
+        if [ "$LONG" = true ]; then
+            echo "Rendering $output"
+        else
+            echo "Rendering $(basename "$output")"
+        fi
 
         typst compile \
             main.typ \
@@ -41,7 +61,11 @@ for file in items/*.json; do
         rebuild=false
 
     else
-        echo "Up to date: $output"
+        if [ "$LONG" = true ]; then
+            echo "Up to date: $output"
+        else
+            echo "Up to date: $(basename "$output")"
+        fi
     fi
 
 done
