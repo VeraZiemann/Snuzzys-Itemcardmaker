@@ -1,12 +1,14 @@
 #!/bin/bash
 
-# flag long path output
-LONG=false
+# flags
+LONG=false          #long path output
+SHOW_UPDATE=false   #show up to date
 
-while getopts "l" opt; do
+while getopts "lu" opt; do
   case $opt in
     l) LONG=true ;;
-    *) echo "Usage: $0 [-l]"; exit 1 ;;
+    u) SHOW_UPTODATE=true ;;
+    *) echo "Usage: $0 [-l] [-u]"; exit 1 ;;
   esac
 done
 
@@ -61,10 +63,12 @@ find ./items -type f -name "*.json" | while read -r file; do
         rebuild=false
 
     else
-        if [ "$LONG" = true ]; then
-            echo "Up to date: $output"
-        else
-            echo "Up to date: $(basename "$output")"
+        if [ "$SHOW_UPTODATE" = true ]; then
+            if [ "$LONG" = true ]; then
+                echo "Up to date: $output"
+            else
+                echo "Up to date: $(basename "$output")"
+            fi
         fi
     fi
 
